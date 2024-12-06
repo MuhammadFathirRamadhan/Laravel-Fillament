@@ -7,6 +7,7 @@ use App\Filament\Resources\ArsipResource\RelationManagers;
 use App\Models\Arsip;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -39,6 +40,10 @@ class ArsipResource extends Resource
                 Forms\Components\FileUpload::make('file_path')
                     ->label('Upload Arsip')
                     ->directory('arsip')
+                    ->disk('public')
+                    ->image()
+                    ->imageEditor()
+
                     ->required(),
             ]);
     }
@@ -54,9 +59,13 @@ class ArsipResource extends Resource
                 Tables\Columns\TextColumn::make('tanggal_diterima')
                     ->date('Y-m-d') // Format tanggal
                     ->sortable(),
-                Tables\Columns\TextColumn::make('file_path')
-                    ->label('File')
-                    ->url(fn($record) => Storage::url($record->file_path)),
+
+// php artisan storage:link
+                    ImageColumn::make('file_path')
+                        ->size(200),
+                // Tables\Columns\TextColumn::make('file_path')
+                //     ->label('File')
+                //     ->url(fn($record) => Storage::url($record->file_path)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime(),
